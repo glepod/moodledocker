@@ -2,16 +2,6 @@
 #git clone https://github.com/glepod/docker-ci_testrunner.git
 #new ubuntu 20.04 installation
 
-FILE=~/.ssh/id_rsa.pub
-if [ ! -f "$FILE" ]; then
-  echo 'Create a ssh key and add to Catalyst and github'
-  echo 'https://git.catalyst-au.net/users/sign_in'
-  echo 'github.com'
-  echo ''
-  echo 'ssh-keygen -b 4096 -t rsa -C "your_email@example.com"'
-  exit 1
-fi
-
 FILE=~/start
 if [ ! -f "$FILE" ]; then
   touch ~/start
@@ -33,11 +23,18 @@ if [ -f "$FILE" ]; then
   exit 1
 fi
 
+FILE=~/.ssh/id_rsa.pub
+if [ ! -f "$FILE" ]; then
+  echo 'Create a ssh key and add to Catalyst and github'
+  echo 'https://git.catalyst-au.net/users/sign_in'
+  echo 'github.com'
+  echo ''
+  echo 'ssh-keygen -b 4096 -t rsa -C "your_email@example.com"'
+  exit 1
+fi
+
 FILE=~/part2
 if [ -f "$FILE" ]; then
-  rm -rf ~/.ssh
-  cp -r .ssh ~/.ssh
-  sudo chmod 400 ~/.ssh/id_rsa
   WORKING_DIR=~/monash_docker
   if [ -d "$WORKING_DIR" ]; then rm -Rf $WORKING_DIR; fi
   cd $WORKING_DIR
