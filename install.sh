@@ -30,6 +30,7 @@ if [ ! -f "$FILE" ]; then
   echo 'github.com'
   echo ''
   echo 'ssh-keygen -b 4096 -t rsa -C "your_email@example.com"'
+  echo 'ssh-add ~/.ssh/id_rsa'
   exit 1
 fi
 

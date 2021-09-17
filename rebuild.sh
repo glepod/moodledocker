@@ -9,8 +9,8 @@ rm -rf mount/moodle/moosh
 cp -r docker_dev_env_install/additional_files/moosh mount/moodle/moosh
 cp -r docker_dev_env_install/additional_files/adminer mount/moodle/adminer
 
-docker exec -it docker-ci_testrunner_db_1 psql --username=moodle --dbname=postgres -c "drop database moodle"
-docker exec -it docker-ci_testrunner_db_1 psql --username=moodle --dbname=postgres -c "create database moodle"
+docker exec -it moodledocker_db_1 psql --username=moodle --dbname=postgres -c "drop database moodle"
+docker exec -it moodledocker_db_1 psql --username=moodle --dbname=postgres -c "create database moodle"
 
 ./bin/moodle-docker-compose exec phpfpm php admin/cli/install_database.php --agree-license --adminpass=admin --adminemail=admin@localhost.com --shortname=moodle --fullname=moodle --summary=moodle
 
@@ -26,5 +26,5 @@ done
 
 # ******************** CREATE ADMIN USER FOR PSQL *************************
 
-docker exec -it docker-ci_testrunner_db_1 psql -U moodle -c "CREATE ROLE admin SUPERUSER CREATEDB CREATEROLE LOGIN;"
-docker exec -it docker-ci_testrunner_db_1 psql -U moodle -c "ALTER USER admin WITH PASSWORD 'admin';"
+docker exec -it moodledocker_db_1 psql -U moodle -c "CREATE ROLE admin SUPERUSER CREATEDB CREATEROLE LOGIN;"
+docker exec -it moodledocker_db_1 psql -U moodle -c "ALTER USER admin WITH PASSWORD 'admin';"
