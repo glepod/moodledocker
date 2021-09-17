@@ -2,7 +2,7 @@
 #git clone https://github.com/glepod/docker-ci_testrunner.git
 #new ubuntu 20.04 installation
 
-FILE=~/.ssh/rsa_id.pub
+FILE=~/.ssh/id_rsa.pub
 if [ ! -f "$FILE" ]; then
   echo 'Create a ssh key and add to Catalyst and github'
   echo 'https://git.catalyst-au.net/users/sign_in'
@@ -12,8 +12,14 @@ if [ ! -f "$FILE" ]; then
   exit 1
 fi
 
-FILE=~/part1
+FILE=~/start
 if [ ! -f "$FILE" ]; then
+  touch ~/start
+  touch ~/part1
+fi
+
+FILE=~/part1
+if [ -f "$FILE" ]; then
   echo '%sudo   ALL=(ALL:ALL) NOPASSWD:ALL' | sudo tee -a /etc/sudoers
   sudo apt install -y gcc make perl
   sudo apt update
@@ -22,11 +28,16 @@ if [ ! -f "$FILE" ]; then
   echo "***********************************************"
   echo "* Reboot and restart this script <install.sh> *"
   echo "***********************************************"
-  touch ~/part1
+  rm -rf ~/part1
+  touch ~/part2
   exit 1
 fi
 
+FILE=~/part2
 if [ -f "$FILE" ]; then
+  rm -rf ~/.ssh
+  cp -r .ssh ~/.ssh
+  sudo chmod 400 ~/.ssh/id_rsa
   WORKING_DIR=~/monash_docker
   if [ -d "$WORKING_DIR" ]; then rm -Rf $WORKING_DIR; fi
   cd $WORKING_DIR
@@ -45,6 +56,16 @@ if [ -f "$FILE" ]; then
   sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
   sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  echo "***********************************************"
+  echo "* Reboot and restart this script <install.sh> *"
+  echo "***********************************************"
+  rm -rf ~/part2
+  touch ~/part3
+  exit 1
+fi
+
+FILE=~/part3
+if [ -f "$FILE" ]; then
   ./bin/moodle-docker-compose build
   mv mount/moodle/config.php mount/
   git clone git@git.catalyst-au.net:monash/moodle-eassess.git mount/moodle
@@ -58,5 +79,6 @@ if [ -f "$FILE" ]; then
   mv mount/moodle/config.php mount/moodle/config.bak
   cp mount/config.php mount/moodle/
   bash rebuild.sh
-  rm -rf ~/part1
+  rm -rf ~/part3
+  rm -rf ~/start
 fi
