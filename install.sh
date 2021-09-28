@@ -45,7 +45,7 @@ if [ -f "$FILE" ]; then
   export DEBIAN_FRONTEND=noninteractive
   export DEBIAN_PRIORITY=critical
   sudo -E apt -qy update
-  sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-  confold" upgrade
+  sudo -E apt -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade
   sudo -E apt -qy autoclean
   sudo apt install -y php
   sudo apt install -y curl
