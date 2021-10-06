@@ -52,7 +52,6 @@ if [ -f "$FILE" ]; then
   groups  # note that "docker" will not be in list of groups
 
   sudo gpasswd -a $USER docker   # add your specific username to the "docker" group
- 
 
   sudo grpck   # verify that your group file has no syntax errors, and only the expected differences exist
 
